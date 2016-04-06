@@ -2,7 +2,7 @@ require 'date'
 
 class Enigma
 
-  def initialize (message, character_map)
+  def initialize (message = "pizza", character_map = "")
     @offsets = nil
     @character_map = character_map
     @message = message
@@ -10,6 +10,10 @@ class Enigma
 
   def get_date
     Date.today.strftime("%d%m%y")
+  end
+
+  def self.get_character_map
+    [*'A'..'z', *'0'..'9', ' ', '.', ',']
   end
 
   def self.key_rotation(key)
@@ -38,7 +42,7 @@ class Enigma
     end
   end
 
-  def self.offset_calculator(rotation, offsets)
+  def offset_calculator(rotation, offsets)
     rotations_offsets = [rotation, offsets]
     @offsets = rotations_offsets.transpose.to_a.map do |element|
       element[0]+ element[1]
@@ -73,9 +77,14 @@ class Enigma
   def rotate_char(character, offset, type)
     rotation = 0
     if type == "add"
-      rotation = @character_map.index(character) + offset
+      character_found_in_map = @character_map.index(character)
+      if (character_found_in_map != nil)
+        rotation = character_found_in_map + offset
+      else
+        puts "couldnt find character #{character}"
+      end
     else
-      rotation = @character_map.index(character) + offset
+      rotation = @character_map.index(character) - offset
     end
     @character_map.rotate(rotation)[0]
   end

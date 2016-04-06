@@ -1,19 +1,25 @@
+require './enigma'
+require 'pry'
+require './key_generator'
+
 class Decrypt
 
-key = '84547'
-encrypted_message = 'yogaj'
+input_file = ARGV[0]
+encrypted_message = File.read(input_file).chomp
 
-key_generator = KeyGenerator.new
+#get the date and key
+key = ARGV[2]
+date = ARGV[3]
 
-key = key_generator.make_key
-date = key_generator.get_date
-character_map = [*'a'..'z', *'0'..'9', ' ', '.', ','];
+enigma_class_variable = Enigma.new(encrypted_message, Enigma.get_character_map)
 
-enigma_class_variable = Enigma.new(encrypted_message, character_map)
-
-rotations = enigma_class_variable.key_rotation(key)
-offset_for_date = enigma_class_variable.offset_for_date(date)
-
+rotations = Enigma.key_rotation(key)
+offset_for_date = Enigma.offset_for_date(date)
 enigma_class_variable.offset_calculator(rotations, offset_for_date)
-puts enigma.decrypt
+#write the output file
+output_file = ARGV[1]
+File.write output_file, enigma_class_variable.decrypt
+
+#tell user it created file
+puts "The file #{output_file.inspect} was created with the key #{key} and date #{date}"
 end
