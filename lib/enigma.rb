@@ -1,6 +1,7 @@
 require 'date'
 
 class Enigma
+  attr_accessor :offsets
 
   def initialize (message = "pizza", character_map = "")
     @offsets = nil
@@ -61,9 +62,10 @@ class Enigma
   end
 
   def rotate_chunk(chunk, type)
-    chunk.map.with_index do |char, index|
+    to_return = chunk.map.with_index do |char, index|
       rotate_char char, @offsets[index], type
     end
+    to_return
   end
 
   def encrypt

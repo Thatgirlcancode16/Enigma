@@ -9,7 +9,7 @@ class Encrypt
   #get message to encrypt from input file and remove any new line
   input_file = ARGV[0]
   message_to_encrypt = File.read(input_file).chomp
-  binding.pry
+
   #instantiate classes
   key_generator = KeyGenerator.new
   enigma_class_variable = Enigma.new(message_to_encrypt, Enigma.get_character_map)
