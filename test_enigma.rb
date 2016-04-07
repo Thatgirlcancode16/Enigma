@@ -14,10 +14,6 @@ class TestEnigma < Minitest::Test
     assert_equal [*'A'..'z', *'0'..'9', ' ', '.', ','], map
   end
 
-  def test_date_length
-    date = Enigma.get_date
-    assert_equal 6, date.length
-  end
   def test_key_rotation
     test_key = "12345"
     final_rotations_array = Enigma.key_rotation(test_key)
@@ -72,39 +68,35 @@ class TestEnigma < Minitest::Test
 
   def test_encyrpt
     message_to_encrypt = 'pizza'
-    message_encrypted = 'sp7ad'
+    expected_encryption = 'sp7ad'
     key = '00740'
-    date = '060416'
+    date = Date.parse("2016-04-06")
 
-    #instantiate classes
-    enigma_class_variable = Enigma.new(message_to_encrypt, Enigma.get_character_map)
-
-    #get rotations and date offsets
-    rotations = Enigma.key_rotation(key)
-    offset_for_date = Enigma.offset_for_date(date)
-
-    #use rotations and offsets for date to get offsets
-    enigma_class_variable.offset_calculator(rotations, offset_for_date)
-
-    #encrypt and store in variable to be used in assert_equal
-    encrypted_message = enigma_class_variable.encrypt
-
-    assert_equal message_encrypted, encrypted_message
+    enigma_class_variable = Enigma.new
+    encrypted_message = enigma_class_variable.encrypt(message_to_encrypt, key, date)
+    assert_equal expected_encryption, encrypted_message
   end
 
   def test_decrypt
     encrypted_message = 'wedlh'
     key = '43519'
-    date = '060416'
-    decrypted = 'IBsS6'
-    enigma_class_variable = Enigma.new(encrypted_message, Enigma.get_character_map)
-
-    rotations = Enigma.key_rotation(key)
-    offset_for_date = Enigma.offset_for_date(date)
-    enigma_class_variable.offset_calculator(rotations, offset_for_date)
-
-    decrypted_message = enigma_class_variable.decrypt
-    assert_equal decrypted, enigma_class_variable.decrypt
+    date = Date.parse("2016-04-06")
+    decrypted_expected = 'IBsS6'
+    enigma_class_variable = Enigma.new
+    decrypted_message = enigma_class_variable.decrypt(encrypted_message, key, date)
+    assert_equal decrypted_expected, decrypted_message
   end
 
+  def test_short_encrypt
+    e = Enigma.new
+    output = e.encrypt("pizza", "12345", Date.parse("2016-04-06"))
+    assert_equal "45Zfp", output
+  end
+
+  def test_short_decrypt
+    e = Enigma.new
+    output = e.encrypt("pizza", "12345", Date.parse("2016-04-06"))
+    unencrypted = e.decrypt(output, "12345", Date.parse("2016-04-06"))
+    assert_equal "pizza", unencrypted
+  end
 end
