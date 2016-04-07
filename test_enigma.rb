@@ -7,13 +7,17 @@ require './lib/enigma'
 require './lib/key_generator'
 
 class TestEnigma < Minitest::Test
-  
+
   def test_character_map
     map = Enigma.get_character_map
     assert_equal 71, map.length
     assert_equal [*'A'..'z', *'0'..'9', ' ', '.', ','], map
   end
 
+  def test_date_length
+    date = Enigma.get_date
+    assert_equal 6, date.length
+  end
   def test_key_rotation
     test_key = "12345"
     final_rotations_array = Enigma.key_rotation(test_key)

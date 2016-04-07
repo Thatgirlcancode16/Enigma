@@ -9,7 +9,7 @@ class Enigma
     @message = message
   end
 
-  def get_date
+  def self.get_date
     Date.today.strftime("%d%m%y")
   end
 
@@ -43,15 +43,15 @@ class Enigma
     end
   end
 
+  def self.split_message_into_chunks(message)
+    message.chars.each_slice(4).to_a
+  end
+
   def offset_calculator(rotation, offsets)
     rotations_offsets = [rotation, offsets]
     @offsets = rotations_offsets.transpose.to_a.map do |element|
       element[0]+ element[1]
     end
-  end
-
-  def self.split_message_into_chunks(message)
-    message.chars.each_slice(4).to_a
   end
 
   def chunk_rotate(type)
