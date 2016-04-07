@@ -1,6 +1,7 @@
 require 'date'
 
 class Enigma
+
   attr_accessor :offsets
 
   def initialize (message = "pizza", character_map = "")
@@ -8,7 +9,7 @@ class Enigma
     @character_map = Enigma.get_character_map
     @message = message
   end
-  
+
   def self.get_character_map
     [*'A'..'z', *'0'..'9', ' ', '.', ',']
   end

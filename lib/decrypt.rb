@@ -8,7 +8,6 @@ class Decrypt
   encrypted_message = File.read(input_file).chomp
 
   key = ARGV[2]
-  #"2016-04-06"
   date = Date.parse(ARGV[3])
 
   enigma_class_variable = Enigma.new
